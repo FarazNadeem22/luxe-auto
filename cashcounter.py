@@ -5,6 +5,114 @@ def get_batch_number() -> int:
     # Get Batch Number
     return  time.strftime("%Y%m%d")
 
+def get_day(month_str: str) -> int:
+    """
+    Get a valid day input from the user based on the specified month.
+
+    Args:
+        month_str (str): The name of the month.
+
+    Returns:
+        int: The selected day.
+
+    Notes:
+        The function prompts the user to enter a day and validates if the entered day
+        is within the valid range for the specified month. It uses a dictionary to map
+        each month to its maximum number of days. If the entered day is not valid, the
+        user is prompted to enter a valid day until a valid input is provided.
+
+    Example:
+        >>> month_input = input("Enter the month: ")
+        >>> day_input = get_day(month_input)
+        >>> print(f"Selected day: {day_input}")
+    """
+    while True:
+        day = int(input("Enter the day: "))  # Convert the input to an integer
+
+        # Define a dictionary to map each month to its corresponding maximum number of days
+        days_in_month = {
+            'January': 31,
+            'February': 28,  # You may need to adjust this for leap years
+            'March': 31,
+            'April': 30,
+            'May': 31,
+            'June': 30,
+            'July': 31,
+            'August': 31,
+            'September': 30,
+            'October': 31,
+            'November': 30,
+            'December': 31
+        }
+
+        # Use the month string to get the maximum number of days
+        max_days = days_in_month.get(month_str, None)
+
+        if max_days is not None and 1 <= day <= max_days:
+            break
+        else:
+            print("Please enter a valid day for the specified month.")
+
+    return day
+
+def get_month() -> str:
+    """
+    Get a valid month input from the user.
+
+    Returns:
+        str: The selected month.
+
+    Notes:
+        The function prompts the user to choose a month by entering the corresponding
+        number (1 for January, 2 for February, etc.). It validates the input to ensure
+        it is a valid number within the range 1 to 12.
+
+    Example:
+        >>> month_input = get_month()
+        >>> print(f"Selected month: {month_input}")
+    """
+    while True:
+        print("Select a month:")
+        print("1. January")
+        print("2. February")
+        print("3. March")
+        print("4. April")
+        print("5. May")
+        print("6. June")
+        print("7. July")
+        print("8. August")
+        print("9. September")
+        print("10. October")
+        print("11. November")
+        print("12. December")
+
+        try:
+            month_number = int(input("Enter the number for the month: "))
+        except ValueError:
+            print("Please enter a valid number.")
+            continue
+
+        if 1 <= month_number <= 12:
+            # Use a dictionary to map month numbers to month names
+            months = {
+                1: 'January',
+                2: 'February',
+                3: 'March',
+                4: 'April',
+                5: 'May',
+                6: 'June',
+                7: 'July',
+                8: 'August',
+                9: 'September',
+                10: 'October',
+                11: 'November',
+                12: 'December'
+            }
+            selected_month = months[month_number]
+            return selected_month
+        else:
+            print("Please enter a valid number between 1 and 12.")
+
 def add_entry(batch_number):
     """
     Take user inputs for a new entry and create a dictionary representing the entry.
@@ -13,8 +121,8 @@ def add_entry(batch_number):
         dict: Dictionary representing the new entry.
     """
     # Take user inputs for a new entry
-    day = input("Enter the day: ")
-    month = input("Enter the month: ")
+    month =get_month()
+    day = get_day(month) 
     person = input("Enter the person: ")
     dept = input("Enter the department: ")
 
