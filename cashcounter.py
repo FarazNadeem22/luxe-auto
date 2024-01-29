@@ -1,5 +1,6 @@
 import pandas as pd
 import time
+import calendar
 
 def get_batch_number() -> int:
     # Get Batch Number
@@ -73,21 +74,15 @@ def get_month() -> str:
     """
     while True:
         print("Select a month:")
-        print("1. January")
-        print("2. February")
-        print("3. March")
-        print("4. April")
-        print("5. May")
-        print("6. June")
-        print("7. July")
-        print("8. August")
-        print("9. September")
-        print("10. October")
-        print("11. November")
-        print("12. December")
+        # Display months with adjusted width for the longest month name
+        max_month_length = max(len(month) for month in calendar.month_name[1:])
+        for month_number in range(1, 13):
+            print(f"{month_number}. {calendar.month_name[month_number]: <{max_month_length + 2}}", end='\t')
+            if month_number % 6 == 0:
+                print()  # Start a new line after every 6 months
 
         try:
-            month_number = int(input("Enter the number for the month: "))
+            month_number = int(input("\nEnter the number for the month: "))
         except ValueError:
             print("Please enter a valid number.")
             continue
@@ -113,6 +108,52 @@ def get_month() -> str:
         else:
             print("Please enter a valid number between 1 and 12.")
 
+def get_person_list() -> set:
+    people_set = {'Jay', 'Manuel', 'Alejandro', 'Nat', 'Jose', 'Kandy'}
+    return people_set
+
+def get_person(people_set: set) -> str:
+    """
+    Get a valid person input from the user based on the provided set of names.
+
+    Args:
+        people_set (set): The set of valid person names.
+
+    Returns:
+        str: The selected person.
+
+    Notes:
+        The function prompts the user to choose a person by entering the corresponding
+        number (1 for the first person, 2 for the second person, etc.). It validates the
+        input to ensure it is a valid number within the range of available people.
+
+    Example:
+        >>> people_set = {'Jay', 'Manuel', 'Alejandro', 'Nat', 'Jose', 'Kandy'}
+        >>> person_input = get_person(people_set)
+        >>> print(f"Selected person: {person_input}")
+    """
+    while True:
+        print("Select a person:")
+        # Display people with assigned numbers
+        for i, person in enumerate(people_set, start=1):
+            print(f"{i}. {person}", end='\t')
+            if i % 6 == 0:
+                print()  # Start a new line after every 6 people
+
+        try:
+            person_number = int(input("\nEnter the number for the person: "))
+        except ValueError:
+            print("Please enter a valid number.")
+            continue
+
+        if 1 <= person_number <= len(people_set):
+            selected_person = list(people_set)[person_number - 1]
+            return selected_person
+        else:
+            print("Please enter a valid number within the range of available people.")
+
+
+
 def add_entry(batch_number):
     """
     Take user inputs for a new entry and create a dictionary representing the entry.
@@ -123,7 +164,7 @@ def add_entry(batch_number):
     # Take user inputs for a new entry
     month =get_month()
     day = get_day(month) 
-    person = input("Enter the person: ")
+    person = get_person(get_person_list())
     dept = input("Enter the department: ")
 
     
