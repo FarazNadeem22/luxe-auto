@@ -1,6 +1,10 @@
 import pandas as pd
 import time
 
+def get_batch_number() -> int:
+    # Get Batch Number
+    return  time.strftime("%Y%m%d")
+
 def add_entry(batch_number):
     """
     Take user inputs for a new entry and create a dictionary representing the entry.
@@ -76,11 +80,9 @@ def save_data(df, excel_file_path):
     print("Data saved successfully.")
 
 def main():
-    # Get Batch Number
-    batch_number =  time.strftime("%Y%m%d%H%M%S")
-
+    batch_number = get_batch_number()
     # Read the existing Excel file into a DataFrame
-    #excel_file_path = "path/to/your/existing_excel_file.xlsx"  # Replace with the actual file path
+    #excel_file_path = "path/to/your/22existing_excel_file.xlsx"  # Replace with the actual file path
     #df = read_existing_data(excel_file_path)
 
     # Display the original DataFrame
