@@ -220,24 +220,28 @@ def add_entry(batch_number):
     clear_screen()
     
     # Get day
+    print(f"Month: {month}\n")
     day = get_day(month)
     print(f"You selected '{day}'")
     time.sleep(1)
     clear_screen()
     
     # Get person
+    print(f"Month: {month}, Day: {day}\n")
     person = get_person(get_person_list())
     print(f"You selected '{person}'")
     time.sleep(1)
     clear_screen()
     
     # Get department
+    print(f"Month: {month}, Day: {day}, Person: {person}\n")
     dept = get_department(department_set=dept_lst())
     print(f"You selected '{dept}'")
     time.sleep(1)
     clear_screen()
     
     # Take input for each denomination of bills
+    print(f"Month: {month}, Day: {day}, Person: {person}, Department: {dept}\n")
     bills = [int(input(f"Enter the number of ${value} bills: ")) for value in [100, 50, 20, 10, 5, 2, 1]]
 
     total_bills = sum(bills)
@@ -316,7 +320,7 @@ def menu(batch_number) -> int:
 
 def main():    
     clear_screen()
-    
+
     batch_number = get_batch_number()
 
     while True:
@@ -326,6 +330,8 @@ def main():
         elif choice == 2:
             new_entry = add_entry(batch_number=batch_number)
             print (new_entry)
+            _ = input("Enter any key to continue")
+            clear_screen()
         else:
             break
     # Read the existing Excel file into a DataFrame
