@@ -1,0 +1,4 @@
+# Pandas and NumPy dependencies
+pandas
+numpy
+

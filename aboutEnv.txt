@@ -1,0 +1,14 @@
+It looks like the virtual environment for your project has been successfully created. In this case, the virtual environment is located at:
+
+/Users/muhammadali/.local/share/virtualenvs/luxe-auto-MmrVNINn
+
+
+Now, you can activate the virtual environment to work within it. Run the following command:
+
+pipenv shell
+
+
+[Note: To create a virtual environment with pipenv, you only need to run: pipenv --python 3.11.7]
+[Note: To Activate the venv you need to run: pipenv shell]
+[Note: To deactivate the virtual environment created by pipenv, you can use the exit command. Here's how you can do it:exit]
+[Note: Alternatively, you can use the deactivate command, but note that this command is specific to virtual environments created with venv or virtualenv, not pipenv:deactivate]

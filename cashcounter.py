@@ -12,7 +12,7 @@ def clear_screen():
 
 def get_batch_number() -> int:
     # Get Batch Number
-    return  time.strftime("%Y%m%d")
+    return  time.strftime("%Y%m%d%s")
 
 def get_day(month_str: str) -> int:
     """
@@ -297,8 +297,37 @@ def save_data(df, excel_file_path):
     df.to_excel(excel_file_path, index=False)
     print("Data saved successfully.")
 
-def main():
+def menu(batch_number) -> int:
+    print("*" * 50)
+    print("Welcome to the Application!")
+    print(f"1. Get New Batch Number: Your current batch number is {batch_number}")
+    print("2. Make a New Entry")
+    print("3. Exit")
+    print("*" * 50)
+    while True:
+        choice = str(input("Enter your choice: "))
+        if choice in ['1','2','3']:
+            clear_screen()
+            return int(choice)
+        else:
+            print(f"{choice}, is an invalid choice. try again")
+            time.sleep(1)
+            clear_screen()
+
+def main():    
+    clear_screen()
+    
     batch_number = get_batch_number()
+
+    while True:
+        choice = menu(batch_number=batch_number)
+        if choice == 1:
+            batch_number = get_batch_number()
+        elif choice == 2:
+            new_entry = add_entry(batch_number=batch_number)
+            print (new_entry)
+        else:
+            break
     # Read the existing Excel file into a DataFrame
     #excel_file_path = "path/to/your/22existing_excel_file.xlsx"  # Replace with the actual file path
     #df = read_existing_data(excel_file_path)
@@ -307,8 +336,7 @@ def main():
     #display_data(df)
 
     # Add a new entry to the DataFrame
-    new_entry = add_entry(batch_number=batch_number)
-    print (new_entry)
+
     #df = df.append(new_entry, ignore_index=True)
 
     # Display the updated DataFrame
