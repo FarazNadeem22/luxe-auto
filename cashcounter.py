@@ -322,11 +322,12 @@ def menu(batch_number) -> int:
     print("Welcome to the Application!")
     print(f"1. Get New Batch Number: Your current batch number is {batch_number}")
     print("2. Make a New Entry")
-    print("3. Exit")
+    print("3. Write to file")
+    print("4. Exit")
     print("*" * 50)
     while True:
         choice = str(input("Enter your choice: "))
-        if choice in ['1','2','3']:
+        if choice in ['1','2','3','4']:
             clear_screen()
             return int(choice)
         else:
@@ -334,11 +335,60 @@ def menu(batch_number) -> int:
             time.sleep(1)
             clear_screen()
 
-def main():    
-    clear_screen()
+def append_entry_to_csv(new_entry: dict, csv_file="entries.csv"):
+    """
+    Append a new entry to a CSV file.
 
-    batch_number = get_batch_number()
+    Args:
+        new_entry (dict): Dictionary representing the new entry.
+        csv_file (str): Path to the CSV file to which the entry will be appended.
+    """
+    # Convert the new entry to a DataFrame
+    entry_df = pd.DataFrame([new_entry])
 
+    # Check if the file exists
+    if os.path.exists(csv_file):
+        # If the file exists, append the entry to it
+        entry_df.to_csv(csv_file, mode='a', header=False, index=False)
+    else:
+        # If the file doesn't exist, create it with the header
+        entry_df.to_csv(csv_file, header=get_csv_header(), index=False)
+
+def get_csv_header():
+    """
+    Get the CSV header.
+
+    Returns:
+        list: List of header names.
+    """
+    return ["Batch Number", "Date", "Month", "Person", "Department",
+            "100s", "50s", "20s", "10s", "5s", "2s", "1s","Total Bills", "$Value"]
+
+
+def get_file_name() -> str:
+    """
+    Prompt the user for a file name, check if the file exists, and create it if needed.
+
+    Returns:
+        str: The chosen or created file name.
+    """
+    while True:
+        file_name = input("Enter a CSV file name (without extension): ") + ".csv"
+
+        # Check if the file already exists
+        if os.path.exists(file_name):
+            print(f"Found file: '{file_name}'.")
+            break
+        else:
+            # Create the file if it doesn't exist
+            with open(file_name, 'w'):
+                pass
+            print(f"File '{file_name}' created.")
+            break
+
+    return file_name
+
+def take_action(batch_number: int):
     while True:
         choice = menu(batch_number=batch_number)
         if choice == 1:
@@ -348,8 +398,23 @@ def main():
             print (new_entry)
             _ = input("Enter any key to continue")
             clear_screen()
-        else:
+        elif choice == 3:
+            file = get_file_name()
+            append_entry_to_csv(new_entry=new_entry, csv_file=file)
+        elif choice == 4:
             break
+        else:
+            print(f"{choice} is an invalid entry")
+    return
+
+def main():    
+    clear_screen()
+    batch_number = get_batch_number()
+    take_action(batch_number=batch_number)
+    
+
+    
+
     # Read the existing Excel file into a DataFrame
     #excel_file_path = "path/to/your/22existing_excel_file.xlsx"  # Replace with the actual file path
     #df = read_existing_data(excel_file_path)
