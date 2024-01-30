@@ -12,7 +12,7 @@ def clear_screen():
 
 def get_batch_number() -> int:
     # Get Batch Number
-    return  time.strftime("%Y%m%d%s")
+    return  time.strftime("%Y%m%d%S")
 
 def get_day(month_str: str) -> int:
     """
@@ -208,6 +208,9 @@ def add_entry(batch_number):
     """
     Take user inputs for a new entry and create a dictionary representing the entry.
 
+    Args:
+        batch_number (str): Batch number associated with the entry.
+
     Returns:
         dict: Dictionary representing the new entry.
     """
@@ -242,7 +245,20 @@ def add_entry(batch_number):
     
     # Take input for each denomination of bills
     print(f"Month: {month}, Day: {day}, Person: {person}, Department: {dept}\n")
-    bills = [int(input(f"Enter the number of ${value} bills: ")) for value in [100, 50, 20, 10, 5, 2, 1]]
+    #try:
+    #    bills = [int(input(f"Enter the number of ${value} bills: ")) for value in [100, 50, 20, 10, 5, 2, 1]]
+    #except Exception as e:
+    #    print("Invalid Entry:", e)
+    bills = []
+
+    for value in [100, 50, 20, 10, 5, 2, 1]:
+        while True:
+            try:
+                bill_count = int(input(f"Enter the number of ${value} bills: "))
+                bills.append(bill_count)
+                break  # Exit the loop if the input is a valid integer
+            except ValueError:
+                print("Invalid entry. Please enter a valid integer.")
 
     total_bills = sum(bills)
     total_amount = sum([bill * value for bill, value in zip(bills, [100, 50, 20, 10, 5, 2, 1])])
