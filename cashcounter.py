@@ -1,6 +1,14 @@
 import pandas as pd
 import time
 import calendar
+import os
+import platform
+
+def clear_screen():
+    if platform.system().lower() == 'windows':
+        os.system('cls')
+    else:
+        os.system('clear')
 
 def get_batch_number() -> int:
     # Get Batch Number
@@ -109,8 +117,7 @@ def get_month() -> str:
             print("Please enter a valid number between 1 and 12.")
 
 def get_person_list() -> set:
-    people_set = {'Jay', 'Manuel', 'Alejandro', 'Nat', 'Jose', 'Kandy'}
-    return people_set
+    return {'Jay', 'Manuel', 'Alejandro', 'Nat', 'Jose', 'Kandy', 'Raheel'}
 
 def get_person(people_set: set) -> str:
     """
@@ -134,9 +141,10 @@ def get_person(people_set: set) -> str:
     """
     while True:
         print("Select a person:")
-        # Display people with assigned numbers
+        # Display people with adjusted width for the longest name
+        max_name_length = max(len(name) for name in people_set)
         for i, person in enumerate(people_set, start=1):
-            print(f"{i}. {person}", end='\t')
+            print(f"{i}. {person: <{max_name_length}}", end='\t')
             if i % 6 == 0:
                 print()  # Start a new line after every 6 people
 
@@ -152,7 +160,49 @@ def get_person(people_set: set) -> str:
         else:
             print("Please enter a valid number within the range of available people.")
 
+def dept_lst() -> set:
+    return {'Store', 'Car Wash'}
 
+def get_department(department_set: set) -> str:
+    """
+    Get a valid department input from the user based on the provided set of names.
+
+    Args:
+        department_set (set): The set of valid department names.
+
+    Returns:
+        str: The selected department.
+
+    Notes:
+        The function prompts the user to choose a department by entering the corresponding
+        number (1 for the first department, 2 for the second department, etc.). It validates
+        the input to ensure it is a valid number within the range of available departments.
+
+    Example:
+        >>> department_set = {'Store', 'Car Wash'}
+        >>> department_input = get_department(department_set)
+        >>> print(f"Selected department: {department_input}")
+    """
+    while True:
+        print("Select a department:")
+        # Display departments with adjusted width for the longest name
+        max_name_length = max(len(name) for name in department_set)
+        for i, department in enumerate(department_set, start=1):
+            print(f"{i}. {department: <{max_name_length}}", end='\t')
+            if i % 6 == 0:
+                print()  # Start a new line after every 6 departments
+
+        try:
+            department_number = int(input("\nEnter the number for the department: "))
+        except ValueError:
+            print("Please enter a valid number.")
+            continue
+
+        if 1 <= department_number <= len(department_set):
+            selected_department = list(department_set)[department_number - 1]
+            return selected_department
+        else:
+            print("Please enter a valid number within the range of available departments.")
 
 def add_entry(batch_number):
     """
@@ -162,11 +212,30 @@ def add_entry(batch_number):
         dict: Dictionary representing the new entry.
     """
     # Take user inputs for a new entry
+    
+    # Get month
     month =get_month()
-    day = get_day(month) 
+    print(f"You selected '{month}'")
+    time.sleep(1)
+    clear_screen()
+    
+    # Get day
+    day = get_day(month)
+    print(f"You selected '{day}'")
+    time.sleep(1)
+    clear_screen()
+    
+    # Get person
     person = get_person(get_person_list())
-    dept = input("Enter the department: ")
-
+    print(f"You selected '{person}'")
+    time.sleep(1)
+    clear_screen()
+    
+    # Get department
+    dept = get_department(department_set=dept_lst())
+    print(f"You selected '{dept}'")
+    time.sleep(1)
+    clear_screen()
     
     # Take input for each denomination of bills
     bills = [int(input(f"Enter the number of ${value} bills: ")) for value in [100, 50, 20, 10, 5, 2, 1]]
