@@ -3,17 +3,21 @@ import time
 import calendar
 import os
 import platform
-import csv
 
 def clear_screen():
+    """
+    Clear the console screen.
+    """
     if platform.system().lower() == 'windows':
         os.system('cls')
     else:
         os.system('clear')
 
 def get_batch_number() -> int:
-    # Get Batch Number
-    return  time.strftime("%Y%m%d%S")
+    """
+    Generate and return a new batch number based on the current date and time.
+    """
+    return time.strftime("%Y%m%d%S")
 
 def get_day(month_str: str) -> int:
     """
@@ -24,17 +28,6 @@ def get_day(month_str: str) -> int:
 
     Returns:
         int: The selected day.
-
-    Notes:
-        The function prompts the user to enter a day and validates if the entered day
-        is within the valid range for the specified month. It uses a dictionary to map
-        each month to its maximum number of days. If the entered day is not valid, the
-        user is prompted to enter a valid day until a valid input is provided.
-
-    Example:
-        >>> month_input = input("Enter the month: ")
-        >>> day_input = get_day(month_input)
-        >>> print(f"Selected day: {day_input}")
     """
     while True:
         day = int(input("Enter the day: "))  # Convert the input to an integer
@@ -71,15 +64,6 @@ def get_month() -> str:
 
     Returns:
         str: The selected month.
-
-    Notes:
-        The function prompts the user to choose a month by entering the corresponding
-        number (1 for January, 2 for February, etc.). It validates the input to ensure
-        it is a valid number within the range 1 to 12.
-
-    Example:
-        >>> month_input = get_month()
-        >>> print(f"Selected month: {month_input}")
     """
     while True:
         print("Select a month:")
@@ -118,6 +102,12 @@ def get_month() -> str:
             print("Please enter a valid number between 1 and 12.")
 
 def get_person_list() -> set:
+    """
+    Get a set of valid person names.
+
+    Returns:
+        set: Set of person names.
+    """
     return {'Jay', 'Manuel', 'Alejandro', 'Nat', 'Jose', 'Kandy', 'Raheel'}
 
 def get_person(people_set: set) -> str:
@@ -129,16 +119,6 @@ def get_person(people_set: set) -> str:
 
     Returns:
         str: The selected person.
-
-    Notes:
-        The function prompts the user to choose a person by entering the corresponding
-        number (1 for the first person, 2 for the second person, etc.). It validates the
-        input to ensure it is a valid number within the range of available people.
-
-    Example:
-        >>> people_set = {'Jay', 'Manuel', 'Alejandro', 'Nat', 'Jose', 'Kandy'}
-        >>> person_input = get_person(people_set)
-        >>> print(f"Selected person: {person_input}")
     """
     while True:
         print("Select a person:")
@@ -162,6 +142,12 @@ def get_person(people_set: set) -> str:
             print("Please enter a valid number within the range of available people.")
 
 def dept_lst() -> set:
+    """
+    Get a set of valid department names.
+
+    Returns:
+        set: Set of department names.
+    """
     return {'Store', 'Car Wash'}
 
 def get_department(department_set: set) -> str:
@@ -173,16 +159,6 @@ def get_department(department_set: set) -> str:
 
     Returns:
         str: The selected department.
-
-    Notes:
-        The function prompts the user to choose a department by entering the corresponding
-        number (1 for the first department, 2 for the second department, etc.). It validates
-        the input to ensure it is a valid number within the range of available departments.
-
-    Example:
-        >>> department_set = {'Store', 'Car Wash'}
-        >>> department_input = get_department(department_set)
-        >>> print(f"Selected department: {department_input}")
     """
     while True:
         print("Select a department:")
@@ -205,20 +181,20 @@ def get_department(department_set: set) -> str:
         else:
             print("Please enter a valid number within the range of available departments.")
 
-def add_entry(batch_number):
+def add_cash_collection_entry(batch_number):
     """
-    Take user inputs for a new entry and create a dictionary representing the entry.
+    Take user inputs for a new cash collection entry and create a dictionary representing the entry.
 
     Args:
         batch_number (str): Batch number associated with the entry.
 
     Returns:
-        dict: Dictionary representing the new entry.
+        dict: Dictionary representing the new cash collection entry.
     """
     # Take user inputs for a new entry
     
     # Get month
-    month =get_month()
+    month = get_month()
     print(f"You selected '{month}'")
     time.sleep(1)
     clear_screen()
@@ -246,10 +222,7 @@ def add_entry(batch_number):
     
     # Take input for each denomination of bills
     print(f"Month: {month}, Day: {day}, Person: {person}, Department: {dept}\n")
-    #try:
-    #    bills = [int(input(f"Enter the number of ${value} bills: ")) for value in [100, 50, 20, 10, 5, 2, 1]]
-    #except Exception as e:
-    #    print("Invalid Entry:", e)
+
     bills = []
 
     for value in [100, 50, 20, 10, 5, 2, 1]:
@@ -280,6 +253,100 @@ def add_entry(batch_number):
         1: bills[6],
         'Total Bills': total_bills,
         'Total Amount': f"${total_amount:,.2f}"  # Format total amount as currency
+    }
+
+    # Add calculated columns
+    new_entry['Gas Cash'] = new_entry[100] - new_entry[50] - new_entry[20] - new_entry[10] - new_entry[5] - new_entry[2] - new_entry[1]
+    new_entry['Net Merch Sales'] = new_entry[20] + new_entry[10]
+    new_entry['Merch Cash'] = new_entry[50] - new_entry[20] - new_entry[10] - new_entry[5] - new_entry[2] - new_entry[1]
+    new_entry['Total Cash'] = new_entry[20] + new_entry[10] - new_entry['Merch Cash']
+    new_entry['Short/Over'] = new_entry[100] - new_entry[50] - new_entry[20] - new_entry[10] - new_entry[5] - new_entry[2] - new_entry[1] - new_entry['Total Cash']
+    new_entry['Status'] = 'Over' if new_entry['Short/Over'] >= 0 else 'Short'
+
+    return new_entry
+
+def add_agk_entry(batch_number):
+    """
+    Take user inputs for a new AGK entry and create a dictionary representing the entry.
+
+    Args:
+        batch_number (str): Batch number associated with the entry.
+
+    Returns:
+        dict: Dictionary representing the new AGK entry.
+    """
+    print("Enter AGK entry details:")
+    # Get day
+    day = int(input("Enter the day: "))
+    
+    # Get month
+    month = input("Enter the month: ")
+    
+    # Get shift
+    shift = int(input("Enter the shift: "))
+    
+    # Get person
+    person = input("Enter the person: ")
+    
+    # Get actual cash
+    actual_cash = float(input("Enter the actual cash: "))
+    
+    # Get total gas sold
+    total_gas_sold = float(input("Enter the total gas sold: "))
+    
+    # Get gas CC
+    gas_cc = float(input("Enter the gas CC: "))
+    
+    # Get gas cash
+    gas_cash = float(input("Enter the gas cash: "))
+    
+    # Get total merch sales
+    total_merch_sales = float(input("Enter the total merch sales: "))
+    
+    # Get sales tax
+    sales_tax = float(input("Enter the sales tax: "))
+    
+    # Get net merch sales
+    net_merch_sales = float(input("Enter the net merch sales: "))
+    
+    # Get merch CC
+    merch_cc = float(input("Enter the merch CC: "))
+    
+    # Get merch cash
+    merch_cash = float(input("Enter the merch cash: "))
+    
+    # Get payouts
+    payouts = float(input("Enter the payouts: "))
+    
+    # Get total cash
+    total_cash = float(input("Enter the total cash: "))
+    
+    # Get short/over
+    short_over = float(input("Enter the short/over: "))
+    
+    # Get status
+    status = input("Enter the status (Over/Short): ")
+
+    # Create a new entry as a dictionary
+    new_entry = {
+        'Batch Number': batch_number,
+        'Day': day,
+        'Month': month,
+        'Shift': shift,
+        'Person': person,
+        'Actual Cash': actual_cash,
+        'Total Gas Sold': total_gas_sold,
+        'Gas CC': gas_cc,
+        'Gas Cash': gas_cash,
+        'Tot Merch Sales': total_merch_sales,
+        'Sales Tax': sales_tax,
+        'Net Merch Sales': net_merch_sales,
+        'Merch CC': merch_cc,
+        'Merch Cash': merch_cash,
+        'Payouts': payouts,
+        'Total Cash': total_cash,
+        'Short/Over': short_over,
+        'Status': status
     }
 
     return new_entry
@@ -319,20 +386,30 @@ def save_data(df, excel_file_path):
     print("Data saved successfully.")
 
 def menu(batch_number) -> int:
+    """
+    Display the menu and get the user's choice.
+
+    Args:
+        batch_number (int): The current batch number.
+
+    Returns:
+        int: User's choice.
+    """
     print("*" * 50)
     print("Welcome to the Application!")
     print(f"1. Get New Batch Number: Your current batch number is {batch_number}")
-    print("2. Make a New Entry")
-    print("3. Write to file")
-    print("4. Exit")
+    print("2. Make a New Cash Collection Entry")
+    print("3. Make a New AGK Entry")
+    print("4. Write to file")
+    print("5. Exit")
     print("*" * 50)
     while True:
         choice = str(input("Enter your choice: "))
-        if choice in ['1','2','3','4']:
+        if choice in ['1', '2', '3', '4', '5']:
             clear_screen()
             return int(choice)
         else:
-            print(f"{choice}, is an invalid choice. try again")
+            print(f"{choice}, is an invalid choice. Try again.")
             time.sleep(1)
             clear_screen()
 
@@ -361,8 +438,8 @@ def get_csv_header():
         list: List of header names.
     """
     return ["Batch Number", "Date", "Month", "Person", "Department",
-            "100s", "50s", "20s", "10s", "5s", "2s", "1s","Total Bills", "$Value"]
-
+            "100s", "50s", "20s", "10s", "5s", "2s", "1s", "Total Bills", "$Value", "Gas Cash", "Net Merch Sales",
+            "Merch Cash", "Total Cash", "Short/Over", "Status"]
 
 def get_file_name() -> str:
     """
@@ -388,48 +465,34 @@ def get_file_name() -> str:
     return file_name
 
 def take_action(batch_number: int):
+    """
+    Main function to handle user actions.
+
+    Args:
+        batch_number (int): The current batch number.
+    """
     while True:
         choice = menu(batch_number=batch_number)
         if choice == 1:
             batch_number = get_batch_number()
         elif choice == 2:
-            new_entry = add_entry(batch_number=batch_number)
-            print (new_entry)
+            new_entry = add_cash_collection_entry(batch_number=batch_number)
+            print(new_entry)
             _ = input("Enter any key to continue")
             clear_screen()
         elif choice == 3:
+            new_entry = add_agk_entry(batch_number=batch_number)
+            print(new_entry)
+            _ = input("Enter any key to continue")
+            clear_screen()
+        elif choice == 4:
             file = get_file_name()
             append_entry_to_csv(new_entry=new_entry, csv_file=file)
-        elif choice == 4:
+        elif choice == 5:
             break
         else:
             print(f"{choice} is an invalid entry")
-    return
-
-def main():    
-    clear_screen()
-    batch_number = get_batch_number()
-    take_action(batch_number=batch_number)
-    
-
-    
-
-    # Read the existing Excel file into a DataFrame
-    #excel_file_path = "path/to/your/22existing_excel_file.xlsx"  # Replace with the actual file path
-    #df = read_existing_data(excel_file_path)
-
-    # Display the original DataFrame
-    #display_data(df)
-
-    # Add a new entry to the DataFrame
-
-    #df = df.append(new_entry, ignore_index=True)
-
-    # Display the updated DataFrame
-    # display_data(df)
-
-    # Save the updated DataFrame back to the Excel file
-    #save_data(df, excel_file_path)
 
 if __name__ == "__main__":
-    main()
+    batch_number = get_batch_number()
+    take_action(batch_number=batch_number)
