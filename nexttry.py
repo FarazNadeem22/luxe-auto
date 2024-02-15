@@ -265,6 +265,8 @@ def get_file_name() -> str:
             break
 
     return file_name
+
+
 def take_action(batch_number: int, cash_df, agk_df):
     """Main function to take user actions."""
     while True:
@@ -323,57 +325,6 @@ def take_action(batch_number: int, cash_df, agk_df):
     return batch_number, cash_df, agk_df
 
 
-def take_action2(batch_number: int, cash_df, agk_df):
-    """Main function to take user actions."""
-    while True:
-        print("*" * 50)
-        print("Welcome to the Application!")
-        print(f"1. Get New Batch Number: Your current batch number is {batch_number}")
-        print("2. Make a New Entry for Cash Collection")
-        print("3. Make a New AGK Entry")
-        print("4. Write Cash Collection to file")
-        print("5. Write AGK Entry to file")
-        print("6. Exit")
-        print("*" * 50)
-
-        choice = input("Enter your choice: ")
-
-        if choice == '1':
-            batch_number = get_batch_number()
-        elif choice == '2':
-            new_entry = add_entry(batch_number=batch_number)
-            append_entry_to_csv(new_entry=new_entry, csv_file='cash_collection.csv')
-        elif choice == '3':
-            # Prompt user for AGK Entry information
-            agk_entry = {}
-            agk_entry['Day'] = int(input("Enter the day: "))
-            agk_entry['Month'] = input("Enter the month: ")
-            agk_entry['Shift'] = int(input("Enter the shift (1 or 2): "))
-            agk_entry['Person'] = input("Enter the person: ")
-            agk_entry['Actual Cash'] = float(input("Enter the actual cash: "))
-            agk_entry['Total Gas Sold'] = float(input("Enter the total gas sold: "))
-            agk_entry['Gas CC'] = float(input("Enter the gas CC: "))
-            agk_entry['Tot Merch Sales'] = float(input("Enter the total merchandise sales: "))
-            agk_entry['Sales Tax'] = float(input("Enter the sales tax: "))
-            agk_entry['Merch CC'] = float(input("Enter the merchandise CC: "))
-            agk_entry['Payouts'] = float(input("Enter the payouts: "))
-
-            # Append AGK entry to DataFrame
-            agk_df = agk_df.append(agk_entry, ignore_index=True)
-            # Calculate AGK columns
-            calculate_agk_columns(agk_df)
-        elif choice == '4':
-            file = get_file_name()
-            append_entry_to_csv(new_entry=new_entry, csv_file=file)
-        elif choice == '5':
-            agk_file = get_file_name()
-            agk_df.to_csv(agk_file, index=False)
-        elif choice == '6':
-            break
-        else:
-            print(f"{choice} is an invalid entry")
-
-    return batch_number
 
 def main():
     clear_screen()

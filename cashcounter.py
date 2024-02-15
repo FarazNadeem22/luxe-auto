@@ -344,6 +344,19 @@ def append_entry_to_csv(new_entry: dict, csv_file):
         new_entry (dict): Dictionary representing the new entry.
         csv_file (str): Path to the CSV file to which the entry will be appended.
     """
+
+    path = os.getcwd()
+
+    while (True):
+        print(f"Saving file to {path}")
+        choice = input(str("Is this the path you want to save the file to? (Y/n)"))
+        if choice.upper() == 'Y':
+            break
+        else:
+            path = input(str("Enter path: "))
+        
+    os.chdir(path=path)
+
     # Convert the new entry to a DataFrame
     entry_df = pd.DataFrame([new_entry])
 
@@ -398,8 +411,9 @@ def take_action(batch_number: int):
             _ = input("Enter any key to continue")
             clear_screen()
         elif choice == 3:
-            file = get_file_name()
+            file = batch_number+ ".csv" #get_file_name()
             append_entry_to_csv(new_entry=new_entry, csv_file=file)
+            batch_number = get_batch_number()
         elif choice == 4:
             break
         else:
