@@ -13,7 +13,7 @@ def clear_screen():
 
 def get_batch_number() -> int:
     # Get Batch Number
-    return  time.strftime("%Y%m%d%S")
+    return  time.strftime("%Y%m%d")
 
 def get_day(month_str: str) -> int:
     """
