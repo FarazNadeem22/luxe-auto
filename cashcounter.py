@@ -12,10 +12,14 @@ def clear_screen():
     else:
         os.system('clear')
 
-def get_batch_number(batch_number: int) -> int:
+def get_batch_number(batch_number: int, first_run = False) -> int:
     # Get Batch Number
-    new: int = int(time.strftime("%Y%m%d"))
+    if first_run:
+        new: int = int(time.strftime("%Y%m%d"))
+        return new
+    new = batch_number
     while (new == batch_number):
+        new *= 10
         new += 1
     return  int(new)
 
@@ -121,8 +125,15 @@ def get_month() -> str:
         else:
             print("Please enter a valid number between 1 and 12.")
 
-def get_person_list() -> set:
-    return {'Jay', 'Manuel', 'Alejandro', 'Nat', 'Jose', 'Kandy', 'Raheel'}
+def get_person_list(csv_file = "people.csv") -> set:
+    # return {'Jay', 'Manuel', 'Alejandro', 'Nat', 'Jose', 'Kandy', 'Raheel'}
+    with open(csv_file, 'r') as file:
+        names = file.read()
+    
+    # Set the names as a set 
+        names_set = set(names.split(','))
+    
+    return names_set
 
 def get_person(people_set: set) -> str:
     """
@@ -165,8 +176,15 @@ def get_person(people_set: set) -> str:
         else:
             print("Please enter a valid number within the range of available people.")
 
-def dept_lst() -> set:
-    return {'Store', 'Car Wash'}
+def dept_lst(csv_file= "departments.csv") -> set:
+    # return {'Store', 'Car Wash'}
+    with open(csv_file, 'r') as file:
+        names = file.read()
+    
+    # Set the names as a set 
+    names_set = set(names.split(','))
+    
+    return names_set
 
 def get_department(department_set: set) -> str:
     """
@@ -320,12 +338,14 @@ def append_entry_to_csv(new_entry: dict, csv_file):
 
     while (True):
         print(f"Saving file to {path}")
-        choice = input(str("Is this the path you want to save the file to? (Y/n)"))
+        choice = input(str("Does this look Good(Y/n)"))
         if choice.upper() == 'Y':
             break
         else:
-            path = input(str("Enter path: "))
-        
+            # path = input(str("Enter path: "))
+            print("Not saving to file. ")
+            time.sleep(1)
+            return
     os.chdir(path=path)
 
     # Convert the new entry to a DataFrame
@@ -449,7 +469,7 @@ def calculate_total_amount(csv_file: str) -> None:
 
 def main():    
     clear_screen()
-    batch_number = get_batch_number(int(time.strftime("%Y%m%d")))
+    batch_number = get_batch_number(int(time.strftime("%Y%m%d")), first_run=True)
     print(batch_number)
     take_action(batch_number=batch_number)
 
