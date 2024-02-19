@@ -127,6 +127,8 @@ def get_month() -> str:
 
 def get_person_list(csv_file = "people.csv") -> set:
     # return {'Jay', 'Manuel', 'Alejandro', 'Nat', 'Jose', 'Kandy', 'Raheel'}
+    # path = os.getcwd()
+    # full_path = path + "\\" + csv_file 
     with open(csv_file, 'r') as file:
         names = file.read()
     
